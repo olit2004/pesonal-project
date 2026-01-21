@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  /* Define custom colors using CSS variables */
+  --color-brand: var(--brand-color);
+  --color-brand-hover: var(--brand-hover);
+  --color-bg-main: var(--bg-main);
+  --color-bg-card: var(--bg-card);
+  --color-text-base: var(--text-base);
+  --color-text-muted: var(--text-muted);
+}
+
+/* Default Light Mode Variables */
+:root {
+  --brand-color: #9333ea; /* purple-600 */
+  --brand-hover: #7e22ce; /* purple-700 */
+  --bg-main: #f8fafc;    /* slate-50 */
+  --bg-card: #ffffff;
+  --text-base: #1e293b;  /* slate-800 */
+  --text-muted: #475569; /* slate-600 */
+}
+
+/* Dark Mode Variables */
+.dark {
+  --brand-color: #a855f7; /* purple-500 */
+  --brand-hover: #c084fc; /* purple-400 */
+  --bg-main: #0f172a;    /* slate-950 */
+  --bg-card: #1e293b;    /* slate-800 */
+  --text-base: #f1f5f9;  /* slate-100 */
+  --text-muted: #94a3b8; /* slate-400 */
+}
+
+@layer base {
+  body {
+    @apply bg-bg-main text-text-base transition-colors duration-300;
+  }
+}

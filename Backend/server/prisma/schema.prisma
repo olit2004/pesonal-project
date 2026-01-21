@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------
+// 1. Enums: System Rules
+// ---------------------------------------------------------
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum CourseStatus {
+  DRAFT // Admin only visibility
+  PUBLISHED // Live in Marketplace
+  ARCHIVED // No longer purchasable
+}
+
+// ---------------------------------------------------------
+// 2. Models: Core Entities
+// ---------------------------------------------------------
+
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String
+  firstName String?
+  lastName  String?
+  role      Role    @default(STUDENT)
+
+  // Stripe Integration
+  stripeCustomerId String? @unique
+
+  // Security
+  resetPasswordToken   String?
+  passwordResetExpires DateTime?
+
+  // Relations
+  coursesCreated Course[]         @relation("AdminCourseRelation")
+  enrollments    Enrollment[]
+  lessonProgress LessonProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id           String       @id @default(uuid())
+  title        String
+  description  String?      @db.Text
+  price        Float        @default(0.0)
+  thumbnailUrl String?
+  status       CourseStatus @default(DRAFT)
+
+  // Creator Link
+  createdBy User   @relation("AdminCourseRelation", fields: [adminId], references: [id])
+  adminId   String
+
+  // Nested Structure
+  modules     Module[]
+  enrollments Enrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Module {
+  id    String @id @default(uuid())
+  title String
+  order Int
+
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+  lessons  Lesson[]
+}
+
+model Lesson {
+  id       String  @id @default(uuid())
+  title    String
+  videoUrl String?
+  content  String? @db.Text
+  order    Int
+  isFree   Boolean @default(false)
+
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId String
+
+  // Progress Tracking
+  lessonProgress LessonProgress[]
+}
+
+model Enrollment {
+  id       String @id @default(uuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+
+  // Stripe Metadata
+  amountPaid      Float   @default(0.0)
+  stripeSessionId String? @unique
+  paymentStatus   String  @default("COMPLETED")
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id          String  @id @default(uuid())
+  userId      String
+  lessonId    String
+  isCompleted Boolean @default(false)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+}

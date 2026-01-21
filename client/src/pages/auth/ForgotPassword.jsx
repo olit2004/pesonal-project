@@ -1,0 +1,112 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Mail, ChevronRight } from "lucide-react";
+
+import { forgotPassword } from "../../service/auth";
+
+const ForgotPassword = () => {
+    const [email, setEmail] = useState("");
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError("");
+        try {
+            await forgotPassword(email);
+            setIsSubmitted(true);
+        } catch (err) {
+            setError(err.message || "Something went wrong. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-[85vh] flex items-center justify-center px-6 bg-bg-main">
+            <div className="bg-bg-card border border-border-dim p-10 rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden group">
+                {/* Subtle Background Glow */}
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand/10 blur-3xl rounded-full group-hover:bg-brand/20 transition-all duration-500"></div>
+
+                <Link
+                    to="/login"
+                    className="inline-flex items-center gap-2 text-text-muted hover:text-brand mb-8 transition-colors group/back font-bold text-sm"
+                >
+                    <ArrowLeft size={18} className="group-hover/back:-translate-x-1 transition-transform" />
+                    Back to Login
+                </Link>
+
+                {!isSubmitted ? (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="text-center sm:text-left">
+                            <h2 className="text-3xl font-black text-text-base mb-2">Forgot Password?</h2>
+                            <p className="text-text-muted">Enter your email address and we&apos;ll send you a link to reset your password.</p>
+                        </div>
+
+                        {error && (
+                            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500 text-sm font-medium animate-shake">
+                                <AlertCircle size={18} />
+                                {error}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="space-y-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Email Address</label>
+                                <div className="relative">
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={20} />
+                                    <input
+                                        type="email"
+                                        placeholder="name@example.com"
+                                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-main border border-border-dim focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all placeholder:text-text-muted/50"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="w-full py-4 bg-brand text-white font-black rounded-2xl shadow-lg shadow-brand/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+                            >
+                                {isLoading ? (
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                ) : (
+                                    <>
+                                        Send Reset Link
+                                        <ChevronRight size={20} />
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </div>
+                ) : (
+                    <div className="text-center space-y-6 animate-in zoom-in-95 duration-500">
+                        <div className="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto ring-8 ring-green-500/5">
+                            <Mail size={40} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-black text-text-base mb-2">Check your email</h2>
+                            <p className="text-text-muted">
+                                We&apos;ve sent a password reset link to <br />
+                                <span className="text-text-base font-bold underline decoration-brand/30">{email}</span>
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setIsSubmitted(false)}
+                            className="text-brand font-bold hover:underline py-2"
+                        >
+                            Didn&apos;t receive the email? Try again
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default ForgotPassword;
