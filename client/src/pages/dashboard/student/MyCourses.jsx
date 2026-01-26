@@ -15,7 +15,7 @@ const MyCourses = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchCourses = async () => {
       try {
         const data = await getStudentStats();

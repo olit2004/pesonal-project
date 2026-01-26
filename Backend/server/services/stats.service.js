@@ -1,5 +1,8 @@
 import { prisma } from '../lib/prisma.js';
 
+
+
+
 export const getAdminStats = async () => {
     // 1. Calculate Total Revenue and Total Enrollments
     const enrollmentStats = await prisma.enrollment.aggregate({
@@ -50,6 +53,8 @@ export const getAdminStats = async () => {
         recentSales,
     };
 };
+
+
 
 export const getStudentStats = async (userId) => {
     // 1. Fetch all enrollments with their nested lessons

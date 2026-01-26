@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-bg-card shadow-sm border-b border-border-dim transition-colors duration-300">
-      <div className="container mx-auto px-6 h-[70px] flex items-center justify-between">
+      <div className="container mx-auto px-6 h-17.5 flex items-center justify-between">
 
         {/* Logo Section */}
         <Link to="/" className="text-2xl font-extrabold flex items-center gap-2 group">
@@ -61,7 +61,7 @@ const Navbar = () => {
               {isDark ? <Sun size={24} /> : <Moon size={24} />}
             </button>
 
-            {/* Auth UI (Desktop) */}
+            {/* Auth UI  */}
             <div className="hidden md:flex items-center gap-3">
               {user ? (
                 <div className="flex items-center gap-4">
@@ -101,9 +101,9 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile */}
       {isOpen && (
-        <div className="absolute top-[70px] left-0 w-full bg-bg-card border-b border-border-dim p-6 flex flex-col gap-6 md:hidden animate-in slide-in-from-top duration-300">
+        <div className="absolute top-17.5 left-0 w-full bg-bg-card border-b border-border-dim p-6 flex flex-col gap-6 md:hidden animate-in slide-in-from-top duration-300">
           <ul className="flex flex-col gap-4">
             {links.map((link) => (
               <li key={link.path}>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="w-full py-3 bg-brand/10 text-brand text-center font-bold rounded-xl border border-brand/20"
+                  className="w-full py-3 text-brand text-center font-bold rounded-xl border border-brand/20"
                 >
                   Login
                 </Link>
@@ -153,7 +153,7 @@ const Navbar = () => {
                   to="/register"
                   onClick={() => setIsOpen(false)}
                   className="w-full py-3 bg-brand text-white text-center font-bold rounded-xl shadow-lg shadow-brand/20"
-                >
+                 >
                   Get Started
                 </Link>
               </>

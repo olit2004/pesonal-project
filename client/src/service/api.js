@@ -5,7 +5,7 @@ const api = axios.create({
   withCredentials: true,
 })
 
-// ---- Refresh handling state ----
+//---- Refresh handling state ----
 let isRefreshing = false
 let failedQueue = []
 
@@ -27,6 +27,7 @@ api.interceptors.response.use(
     const originalRequest = error.config
 
     // If unauthorized and not already retried
+    
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -54,10 +55,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError)
 
-        // Optional: hard logout redirect
-        // if (typeof window !== "undefined") {
-        //   window.location.href = "/login"
-        // }
+
 
         return Promise.reject(refreshError)
       } finally {

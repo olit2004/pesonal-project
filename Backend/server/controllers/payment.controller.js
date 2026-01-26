@@ -1,10 +1,7 @@
 import { stripe } from '../lib/stripe.js';
 import * as PaymentService from '../services/payment.service.js';
 
-/**
- * @desc    Initiate payment - Outbound
- * @route   POST /api/payment/create-checkout
- */
+
 export const createCheckoutSession = async (req, res) => {
     try {
         const { courseId } = req.body;
@@ -15,7 +12,7 @@ export const createCheckoutSession = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            url: session.url, // Frontend will use this to redirect
+            url: session.url, 
         });
     } catch (error) {
         console.error('Checkout Error:', error);
@@ -26,10 +23,6 @@ export const createCheckoutSession = async (req, res) => {
     }
 };
 
-/**
- * @desc    Verify and fulfill payment - Inbound
- * @route   POST /api/payment/webhook
- */
 export const stripeWebhook = async (req, res) => {
     const sig = req.headers['stripe-signature'];
     let event;
@@ -37,13 +30,13 @@ export const stripeWebhook = async (req, res) => {
     try {
         event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
-        console.error(`❌ Webhook Error: ${err.message}`);
+        console.error(` Webhook Error: ${err.message}`);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
-        console.log(`🔔 Payment received: ${session.id}`);
+        console.log(` Payment received: ${session.id}`);
 
         // Handle database enrollment
         await PaymentService.fulfillEnrollment(session);
@@ -52,10 +45,6 @@ export const stripeWebhook = async (req, res) => {
     res.json({ received: true });
 };
 
-/**
- * @desc    Fallback fulfillment for local dev/missing webhooks
- * @route   POST /api/payment/verify-session
- */
 export const verifyPaymentSession = async (req, res) => {
     try {
         const { courseId } = req.body;

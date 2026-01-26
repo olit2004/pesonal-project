@@ -6,6 +6,7 @@ import { useAuth } from "../../../service/AuthContext";
 import { Link } from "react-router-dom";
 import { getStudentStats } from "../../../service/student";
 
+
 const StudentOverview = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
@@ -40,7 +41,7 @@ const StudentOverview = () => {
 
       <main className="flex-1 p-8 overflow-y-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-text-base">Welcome back, {user?.firstName}! 👋</h1>
+          <h1 className="text-3xl font-bold text-text-base">Welcome back, {user?.firstName}! </h1>
           <p className="text-text-muted">
             {stats?.activeCourses > 0
               ? `You have ${stats.activeCourses} active courses.`
@@ -50,10 +51,11 @@ const StudentOverview = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <StatCard title="Enrolled" value={stats?.activeCourses || 0} icon="📚" colorClass="text-blue-500 bg-blue-500" />
-          <StatCard title="Completed" value={stats?.completedCourses || 0} icon="🏆" colorClass="text-green-500 bg-green-500" />
-          <StatCard title="Overall Progress" value={`${stats?.overallCompletion || 0}%`} icon="📈" colorClass="text-purple-500 bg-purple-500" />
+          <StatCard title="Enrolled" value={stats?.activeCourses || 0}  />
+          <StatCard title="Completed" value={stats?.completedCourses || 0} />
+          <StatCard title="Overall Progress" value={`${stats?.overallCompletion || 0}%`}  />
         </div>
+        
 
         {/* Enrolled Courses */}
         <section>

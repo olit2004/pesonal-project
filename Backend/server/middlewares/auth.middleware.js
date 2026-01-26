@@ -30,10 +30,7 @@ export const protect = async (req, res, next) => {
     }
 };
 
-/**
- * Middleware that allows request to proceed even if token is missing or invalid.
- * If a valid token is present, req.user is populated.
- */
+
 export const optionalProtect = async (req, res, next) => {
     try {
         const token = req.cookies.token;
@@ -47,10 +44,7 @@ export const optionalProtect = async (req, res, next) => {
     next();
 };
 
-/**
- * Middleware to restrict access based on user roles
- * Usage: authorize('INSTRUCTOR', 'ADMIN')
- */
+
 export const authorize = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {

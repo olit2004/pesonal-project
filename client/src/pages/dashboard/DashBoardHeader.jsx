@@ -19,16 +19,14 @@ const DashboardHeader = () => {
   };
 
   return (
-    <header className="h-[70px] bg-bg-card border-b border-border-dim px-6 flex items-center justify-between shadow-sm sticky top-0 z-50">
+    <header className="h-17.5 bg-bg-card border-b border-border-dim px-6 flex items-center justify-between shadow-sm sticky top-0 z-50">
       <Link to={isAdmin ? "/admin" : "/dashboard"} className="text-xl font-bold flex items-center gap-2">
         <img src="/Assets/ignite logo.svg" alt="logo" className="w-6" />
         <span className="hidden sm:inline">Ignite <span className="text-brand">Academy</span></span>
       </Link>
 
       <div className="flex items-center gap-4">
-        <span className="text-sm font-bold bg-brand/5 text-brand px-3 py-1 rounded-full border border-brand/10">
-          {isAdmin ? "Admin Console" : "Student Workspace"}
-        </span>
+
 
         <button
           onClick={() => setIsDark(!isDark)}

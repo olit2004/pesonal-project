@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 export const useDarkMode = () => {
   const [isDark, setIsDark] = useState(() => {
     // Check local storage or system preference
+
     return localStorage.getItem('theme') === 'dark' || 
            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  });
-
-  useEffect(() => {
+  }); 
+useEffect(() => {
     const root = window.document.documentElement;
     if (isDark) {
       root.classList.add('dark');
@@ -16,7 +16,7 @@ export const useDarkMode = () => {
       root.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
-  }, [isDark]);
+}, [isDark]);
 
   return [isDark, setIsDark];
 };

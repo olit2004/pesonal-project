@@ -18,14 +18,10 @@ export const getAdminDashboardStats = async (req, res) => {
     }
 };
 
-/**
- * @desc    Get all stats for the student dashboard
- * @route   GET /api/stats/student
- * @access  Private (Student/Admin)
- */
+
 export const getStudentDashboardStats = async (req, res) => {
     try {
-        // req.user is populated by your 'protect' middleware
+     
         const userId = req.user.id;
 
         const stats = await StatsService.getStudentStats(userId);

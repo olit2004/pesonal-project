@@ -17,12 +17,13 @@ const EnrolledCourseCard = ({ course, progress = 45, onSyllabusClick }) => (
         <Link to={`/dashboard/learn/${course.id || '1'}`} className="text-center py-2 bg-brand text-white rounded-lg text-[10px] font-black uppercase tracking-wider hover:brightness-110 transition-all">
           Learn
         </Link>
-        <button
+        
+       { onSyllabusClick&&<button
           onClick={onSyllabusClick}
           className="text-center py-2 bg-bg-main hover:bg-bg-hover text-text-muted hover:text-text-base rounded-lg text-[10px] font-black uppercase tracking-wider transition-all border border-border-dim"
         >
           Syllabus
-        </button>
+        </button>}
       </div>
     </div>
   </div>

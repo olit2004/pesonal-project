@@ -9,6 +9,7 @@ export const getStudentStats = async () => {
     }
 };
 
+
 export const getExploreCourses = async () => {
     try {
         const response = await api.get("/courses");
@@ -35,6 +36,7 @@ export const verifyPaymentSession = async (courseId) => {
         throw error.response?.data || error.message;
     }
 };
+
 
 export const updateLessonProgress = async (courseId, lessonId, isCompleted) => {
     try {
