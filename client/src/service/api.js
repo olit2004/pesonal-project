@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL:import.meta.env.VITE_API_URL,
   withCredentials: true,
 })
 
@@ -16,7 +16,7 @@ const processQueue = (error) => {
     } else {
       promise.resolve()
     }
-  }) 
+  })
   failedQueue = []
 }
 
@@ -25,8 +25,8 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    
-    
+
+
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&

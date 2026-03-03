@@ -16,9 +16,12 @@ import paymentRoutes from './routes/payment.route.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",")
+  : [];
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -39,5 +42,5 @@ app.use('/api/progress', progressRoutes);
 
 app.use('/api/stats', statsRoutes);
 app.listen(PORT, () => {
-    console.log(` Server ready at http://localhost:${PORT}`);
+  console.log(` Server ready at http://localhost:${PORT}`);
 });
