@@ -104,7 +104,7 @@ const AdminOverview = () => {
           {/* Quick Actions */}
           <div className="bg-bg-card p-6 rounded-3xl border border-border-dim shadow-sm flex flex-col">
             <h2 className="text-xl font-bold mb-6">Quick Actions</h2>
-            <div className="grid grid-cols-1 gap-4 flex-1">
+            <div className="grid grid-cols-1 gap-4 ">
               <Link
                 to="/admin/courses/create"
                 className="p-4 bg-brand/5 border border-brand/20 rounded-2xl text-brand font-black text-center hover:bg-brand hover:text-white transition-all transform hover:-translate-y-1 shadow-sm active:scale-95"

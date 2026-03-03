@@ -23,35 +23,12 @@ export const createCheckoutSession = async (req, res) => {
     }
 };
 
-export const stripeWebhook = async (req, res) => {
-    const sig = req.headers['stripe-signature'];
-    let event;
-
-    try {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-        console.error(` Webhook Error: ${err.message}`);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    if (event.type === 'checkout.session.completed') {
-        const session = event.data.object;
-        console.log(` Payment received: ${session.id}`);
-
-        // Handle database enrollment
-        await PaymentService.fulfillEnrollment(session);
-    }
-
-    res.json({ received: true });
-};
-
 export const verifyPaymentSession = async (req, res) => {
     try {
         const { courseId } = req.body;
         const userId = req.user.id;
 
         const result = await PaymentService.verifyAndFulfill(userId, courseId);
-
         res.status(200).json({
             success: true,
             data: result,

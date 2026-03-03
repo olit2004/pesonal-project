@@ -5,6 +5,7 @@ import api from "../../service/api"
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
   const { user, login } = useAuth()
   const navigate = useNavigate()
 
@@ -15,8 +16,9 @@ const Login = () => {
     }
   }, [user, navigate])
 
+  
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault() 
 
     try {
       const { data } = await api.post("/auth/login", {

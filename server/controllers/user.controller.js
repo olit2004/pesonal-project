@@ -75,7 +75,7 @@ export const updateMe = async (req, res) => {
     }
 };
 
-// ADMIN: Delete any user
+// : Delete any user
 export const adminDeleteUser = async (req, res) => {
     try {
         await UserService.deleteUserAccount(req.params.id);
@@ -85,7 +85,7 @@ export const adminDeleteUser = async (req, res) => {
     }
 };
 
-// USER: Delete own account
+// : Delete own account
 export const deleteMe = async (req, res) => {
     try {
         await UserService.deleteUserAccount(req.user.id);

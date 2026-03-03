@@ -13,6 +13,7 @@ import {
     Lock,
     ExternalLink
 } from "lucide-react";
+  
 import api from "../../../service/api";
 import { createCheckoutSession, updateLessonProgress } from "../../../service/student";
 
@@ -31,15 +32,15 @@ const CourseDetail = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
+            
                 const { data } = await api.get(`/courses/${courseId}`);
                 const courseData = data.data;
                 setCourse(courseData);
 
-                // AUTO-SELECT FIRST LESSON:
-                // Find the first module that has lessons
+             
                 const firstModuleWithLessons = courseData.modules?.find(m => m.lessons?.length > 0);
                 if (firstModuleWithLessons) {
-                    // Default to first free lesson or just the first lesson
+              
                     const initialLesson = firstModuleWithLessons.lessons.find(l => l.isFree) || firstModuleWithLessons.lessons[0];
                     setActiveLesson(initialLesson);
                 }
@@ -91,6 +92,8 @@ const CourseDetail = () => {
             setTogglingProgress(false);
         }
     };
+
+    // handling buying of book
 
     const handleEnroll = async () => {
         if (!user) {

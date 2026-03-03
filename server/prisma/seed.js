@@ -22,16 +22,16 @@ async function main() {
     
   });
 
-  console.log('-----------------------------------');
-  console.log('✅ Admin User Seeded Successfully!');
-  console.log(`📧 Email: ${admin.email}`);
-  console.log(`🔑 Password: ${adminPassword}`);
-  console.log('-----------------------------------');
+
+  console.log('Admin User Seeded Successfully!');
+  console.log(` Email: ${admin.email}`);
+  console.log(`Password: ${adminPassword}`);
+
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error seeding admin:', e);
+    console.error('Error seeding admin:', e);
     process.exit(1);
   })
   .finally(async () => {

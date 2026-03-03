@@ -45,9 +45,7 @@ export const router = createBrowserRouter([
       { path: "reset-password/:token", element: <ResetPassword /> },
       { path: "course/:courseId", element: <CourseDetail /> },
 
-      // =========================
-      // STUDENT / SHARED DASHBOARD
-      // =========================
+      // STUDENT 
       {
         path: "dashboard",
         element: (
@@ -85,9 +83,9 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // =========================
+   
       // ADMIN DASHBOARD
-      // =========================
+      
       {
         path: "admin",
         element: (

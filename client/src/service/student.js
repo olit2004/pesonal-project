@@ -21,7 +21,7 @@ export const getExploreCourses = async () => {
 
 export const createCheckoutSession = async (courseId) => {
     try {
-        const response = await api.post("/payment/create-checkout", { courseId });
+        const response =  await api.post("/payment/create-checkout", { courseId });
         return response.data;
     } catch (error) {
         throw error.response?.data || error.message;

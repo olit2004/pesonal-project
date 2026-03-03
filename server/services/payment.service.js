@@ -14,7 +14,7 @@ export const createCheckoutSession = async (courseId, userId) => {
         const customer = await stripe.customers.create({
             email: user.email,
             name: `${user.firstName} ${user.lastName}`,
-            metadata: { userId: user.id },
+             metadata: { userId: user.id },
         });
 
         await prisma.user.update({

@@ -8,10 +8,10 @@ if (!access_secret || !refresh_secret) {
 }
 
 export function setToken(res, payload) {
-    // 1. Create Access Token (Short-lived)
+    
     const accessToken = jwt.sign(payload, access_secret, { expiresIn: '15m' });
 
-    // 2. Create Refresh Token (Long-lived)
+
     const refreshToken = jwt.sign(payload, refresh_secret, { expiresIn: '7d' });
 
     const cookieOptions = {

@@ -13,9 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
-// ---------------------------------------------------------
-// 1. Enums: System Rules
-// ---------------------------------------------------------
+
 
 enum Role {
   STUDENT
@@ -28,9 +26,7 @@ enum CourseStatus {
   ARCHIVED // No longer purchasable
 }
 
-// ---------------------------------------------------------
-// 2. Models: Core Entities
-// ---------------------------------------------------------
+
 
 model User {
   id        String  @id @default(uuid())

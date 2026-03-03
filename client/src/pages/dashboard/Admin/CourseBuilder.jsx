@@ -113,6 +113,7 @@ const CourseBuilder = () => {
         modules: formattedModules
       };
 
+      // sending data to ty
       const { data } = await api.post("/courses", payload);
 
       if (data.success) {
@@ -294,7 +295,7 @@ const CourseBuilder = () => {
                             placeholder="Lesson notes or text content..."
                             value={lesson.content}
                             onChange={(e) => updateLessonField(module.id, lesson.id, "content", e.target.value)}
-                            className="w-full text-xs p-2.5 bg-bg-main border border-border-dim rounded-lg focus:border-brand/50 outline-none transition resize-none h-[38px]"
+                            className="w-full text-xs p-2.5 bg-bg-main border border-border-dim rounded-lg focus:border-brand/50 outline-none transition resize-none h-9.5]"
                           />
                         </div>
                       </div>

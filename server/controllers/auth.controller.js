@@ -74,7 +74,7 @@ export const refresh = async (req, res) => {
         // 2. Validate and get user info
         const user = await AuthService.refreshSession(refreshToken);
 
-        // 3. Re-issue BOTH tokens (Rotating the tokens)
+        
         setToken(res, { id: user.id, role: user.role });
 
         res.status(200).json({
@@ -82,7 +82,7 @@ export const refresh = async (req, res) => {
             user,
         });
     } catch (error) {
-        // If refresh fails (token expired), clear everything so they must log in
+      
         removeToken(res);
         res.status(401).json({ success: false, error: error.message });
     }

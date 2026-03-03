@@ -16,17 +16,16 @@ const processQueue = (error) => {
     } else {
       promise.resolve()
     }
-  })
+  }) 
   failedQueue = []
 }
 
-// ---- Response interceptor ----
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
 
-    // If unauthorized and not already retried
+    
     
     if (
       error.response?.status === 401 &&

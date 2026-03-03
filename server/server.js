@@ -11,7 +11,7 @@ import enrollmentRoutes from './routes/enrollment.routes.js';
 import progressRoutes from './routes/progress.route.js';
 import statsRoutes from './routes/stats.route.js';
 import paymentRoutes from './routes/payment.route.js';
-import { stripeWebhook } from './controllers/payment.controller.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,7 +25,7 @@ app.use(
   })
 )
 
-app.post('/api/payment/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -39,5 +39,5 @@ app.use('/api/progress', progressRoutes);
 
 app.use('/api/stats', statsRoutes);
 app.listen(PORT, () => {
-    console.log(" Server ready at http://localhost:${PORT}");
+    console.log(` Server ready at http://localhost:${PORT}`);
 });
