@@ -4,20 +4,20 @@ import CourseCard from "../../../components/courses/CourseCard"
 import SyllabusModal from "../../../components/SyllabusModal"
 import { Search, SlidersHorizontal, BookOpen } from "lucide-react"
 import { getExploreCourses } from "../../../service/student"
+import Loading from "../../../components/ui/Loading"
+import { useData } from "../../../service/DataContext"
 
 const Explore = () => {
+  const { catalog, fetchCatalog } = useData();
   const [query, setQuery] = useState("")
-  const [catalog, setCatalog] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!catalog)
   const [selectedCourse, setSelectedCourse] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
-    const fetchCatalog = async () => {
+    const loadCatalog = async () => {
       try {
-        const data = await getExploreCourses();
-        // Filter to only show PUBLISHED courses
-        setCatalog(data.data.filter(c => c.status === 'PUBLISHED'));
+        await fetchCatalog();
       } catch (error) {
         console.error("Failed to fetch catalog:", error);
       } finally {
@@ -25,12 +25,13 @@ const Explore = () => {
       }
     };
 
-    fetchCatalog();
-  }, []);
+    loadCatalog();
+  }, [fetchCatalog]);
 
   const filteredCourses = useMemo(() => {
     const q = query.toLowerCase()
-    return catalog.filter((course) =>
+    const courses = catalog || [];
+    return courses.filter((course) =>
       course.title.toLowerCase().includes(q)
     )
   }, [query, catalog])
@@ -86,11 +87,7 @@ const Explore = () => {
 
         {/* Course Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map(n => (
-              <div key={n} className="h-80 bg-bg-card animate-pulse rounded-2xl border border-border-dim"></div>
-            ))}
-          </div>
+          <Loading text="Hunting for challenges..." />
         ) : filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredCourses.map((course) => (

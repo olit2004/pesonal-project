@@ -5,21 +5,23 @@ import EnrolledCourseCard from "../EnrolledCourseCard";
 import SyllabusModal from "../../../components/SyllabusModal";
 import { Search, BookOpen } from "lucide-react";
 import { getStudentStats } from "../../../service/student";
+import Loading from "../../../components/ui/Loading";
 import { Link } from "react-router-dom";
+
+import { useData } from "../../../service/DataContext";
 
 const MyCourses = () => {
   const { user } = useAuth();
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { stats, fetchStats } = useData();
+  const [loading, setLoading] = useState(!stats);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-useEffect(() => {
-    const fetchCourses = async () => {
+  useEffect(() => {
+    const loadCourses = async () => {
       try {
-        const data = await getStudentStats();
-        setEnrolledCourses(data.data.courses || []);
+        await fetchStats();
       } catch (error) {
         console.error("Failed to fetch enrolled courses:", error);
       } finally {
@@ -27,8 +29,10 @@ useEffect(() => {
       }
     };
 
-    fetchCourses();
-  }, []);
+    loadCourses();
+  }, [fetchStats]);
+
+  const enrolledCourses = stats?.courses || [];
 
   const openSyllabus = (course) => {
     setSelectedCourse(course);
@@ -63,11 +67,7 @@ useEffect(() => {
         </header>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(n => (
-              <div key={n} className="h-64 bg-bg-card animate-pulse rounded-2xl border border-border-dim"></div>
-            ))}
-          </div>
+          <Loading text="Loading your classroom..." />
         ) : filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCourses.map((course) => (

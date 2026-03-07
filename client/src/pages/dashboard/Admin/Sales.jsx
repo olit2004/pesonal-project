@@ -3,6 +3,7 @@ import Sidebar from "../SideBar";
 import StatCard from "../StatCard";
 import { DollarSign, TrendingUp, CreditCard, BarChart3, Loader2, Users } from "lucide-react";
 import api from "../../../service/api";
+import Loading from "../../../components/ui/Loading";
 
 const Sales = () => {
     const [stats, setStats] = useState(null);
@@ -40,10 +41,7 @@ const Sales = () => {
                 </header>
 
                 {loading ? (
-                    <div className="py-20 flex flex-col items-center justify-center gap-4 bg-bg-card rounded-3xl border border-border-dim">
-                        <Loader2 className="w-10 h-10 text-brand animate-spin" />
-                        <p className="text-text-muted font-bold tracking-wide">Retrieving financial registers...</p>
-                    </div>
+                    <Loading text="Retrieving financial registers..." />
                 ) : (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">

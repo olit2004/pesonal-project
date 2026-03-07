@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDarkMode } from "../../hooks/useDarkMode";
 import { useAuth } from "../../service/AuthContext";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, LogOut } from "lucide-react";
+import Loading from "../ui/Loading";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,8 +68,9 @@ const Navbar = () => {
                 <div className="flex items-center gap-4">
                   <button
                     onClick={logout}
-                    className="px-4 py-2 text-sm font-bold text-red-500 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900 rounded-lg hover:bg-red-500 hover:text-white transition-all"
+                    className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-red-500 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900 rounded-xl hover:bg-red-500 hover:text-white transition-all group shadow-sm hover:shadow-red-500/20"
                   >
+                    <LogOut size={18} className="group-hover:-translate-x-0.5 transition-transform" />
                     Logout
                   </button>
                 </div>
@@ -135,8 +137,9 @@ const Navbar = () => {
                 </Link>
                 <button
                   onClick={() => { logout(); setIsOpen(false); }}
-                  className="w-full py-3 bg-red-50 text-red-600 font-bold rounded-xl border border-red-100"
+                  className="w-full py-4 bg-red-50 text-red-600 font-bold rounded-2xl border border-red-100 flex items-center justify-center gap-3 active:scale-[0.98] transition-transform"
                 >
+                  <LogOut size={20} />
                   Logout
                 </button>
               </>
@@ -153,7 +156,7 @@ const Navbar = () => {
                   to="/register"
                   onClick={() => setIsOpen(false)}
                   className="w-full py-3 bg-brand text-white text-center font-bold rounded-xl shadow-lg shadow-brand/20"
-                 >
+                >
                   Get Started
                 </Link>
               </>

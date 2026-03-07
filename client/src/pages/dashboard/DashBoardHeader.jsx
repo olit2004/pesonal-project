@@ -1,7 +1,8 @@
 import { useAuth } from "../../service/AuthContext"
 import { Link, useLocation } from "react-router-dom"
 import { useDarkMode } from "../../hooks/useDarkMode";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, LogOut } from "lucide-react";
+import Avatar from "../../components/ui/Avatar";
 import { useNavigate } from "react-router-dom"
 
 
@@ -36,12 +37,14 @@ const DashboardHeader = () => {
           {isDark ? <Sun size={24} /> : <Moon size={24} />}
         </button>
 
-        <div className="h-8 w-8 rounded-full bg-brand text-white flex items-center justify-center font-bold text-xs">
-          {user?.firstName?.charAt(0) || user?.email?.charAt(0) || "U"}
-        </div>
+        <Avatar user={user} />
 
-        <button onClick={handleLogout} className="text-sm text-red-500 font-bold hover:underline">
-          Logout
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-red-500 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900 rounded-xl hover:bg-red-500 hover:text-white transition-all group"
+        >
+          <LogOut size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+          <span className="hidden sm:inline">Logout</span>
         </button>
       </div>
     </header>

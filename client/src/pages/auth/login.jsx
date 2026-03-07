@@ -5,6 +5,7 @@ import api from "../../service/api"
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const { user, login } = useAuth()
   const navigate = useNavigate()
@@ -16,9 +17,10 @@ const Login = () => {
     }
   }, [user, navigate])
 
-  
+
   const handleSubmit = async (e) => {
-    e.preventDefault() 
+    e.preventDefault()
+    setLoading(true)
 
     try {
       const { data } = await api.post("/auth/login", {
@@ -36,6 +38,8 @@ const Login = () => {
         console.error("Login error:", error)
         alert("Something went wrong. Please try again.")
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -79,9 +83,13 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-brand text-white font-bold rounded-lg hover:bg-brand-hover transition-all"
+            disabled={loading}
+            className="w-full py-3 bg-brand text-white font-bold rounded-lg hover:bg-brand-hover transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Sign In
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : null}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 

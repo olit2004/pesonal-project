@@ -14,7 +14,7 @@ export const createCheckoutSession = async (courseId, userId) => {
         const customer = await stripe.customers.create({
             email: user.email,
             name: `${user.firstName} ${user.lastName}`,
-             metadata: { userId: user.id },
+            metadata: { userId: user.id },
         });
 
         await prisma.user.update({
@@ -43,6 +43,7 @@ export const createCheckoutSession = async (courseId, userId) => {
         cancel_url: `${process.env.CLIENT_URL}/dashboard/course/${courseId}`,
         metadata: { userId, courseId },
     });
+    console.log(`[Stripe] Created session. Success URL: ${process.env.CLIENT_URL}/dashboard/learn/${courseId}?success=true`);
 };
 
 export const fulfillEnrollment = async (session) => {

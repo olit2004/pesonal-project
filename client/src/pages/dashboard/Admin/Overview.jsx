@@ -4,6 +4,8 @@ import StatCard from "../StatCard";
 import { Users, BookOpen, DollarSign, Activity, ArrowRight, Star, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../../../service/api";
+import Loading from "../../../components/ui/Loading";
+import Avatar from "../../../components/ui/Avatar";
 
 const AdminOverview = () => {
   const [stats, setStats] = useState(null);
@@ -33,13 +35,7 @@ const AdminOverview = () => {
     }).format(amount);
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-1 h-full items-center justify-center bg-bg-main">
-        <Loader2 className="w-10 h-10 text-brand animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return <Loading text="Fetching administrative data..." />;
   console.log("the data from admin stat is ", stats)
 
   const { totalRevenue, totalSales, totalStudents, totalCourses, recentSales } = stats || {};
@@ -77,9 +73,7 @@ const AdminOverview = () => {
                 recentSales.map((sale, i) => (
                   <div key={sale.id || i} className="flex justify-between items-center p-4 hover:bg-bg-main/50 rounded-2xl transition border border-transparent hover:border-border-dim">
                     <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-full bg-brand/10 flex items-center justify-center font-bold text-brand shadow-inner uppercase">
-                        {sale.user?.firstName?.[0] || 'U'}
-                      </div>
+                      <Avatar user={{ firstName: sale.user?.firstName, email: sale.user?.email }} size="sm" />
                       <div>
                         <p className="font-bold">{sale.user?.firstName} {sale.user?.lastName}</p>
                         <p className="text-xs text-text-muted">Enrolled in <span className="text-text-base font-medium">{sale.course?.title}</span></p>

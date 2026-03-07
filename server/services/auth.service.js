@@ -99,6 +99,7 @@ export const forgotPassword = async (email) => {
 
     // 5. Construct Email
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    console.log(`[ForgotPassword] Constructed Reset URL: ${resetUrl}`);
 
     const htmlMessage = `
         <h1>Password Reset Request</h1>

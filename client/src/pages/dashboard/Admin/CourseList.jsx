@@ -3,6 +3,7 @@ import Sidebar from "../SideBar";
 import { Link } from "react-router-dom";
 import { Edit, Trash2, Eye, Plus, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import api from "../../../service/api";
+import Loading from "../../../components/ui/Loading";
 
 const AdminCourseList = () => {
   const [courses, setCourses] = useState([]);
@@ -75,10 +76,7 @@ const AdminCourseList = () => {
 
         <div className="bg-bg-card rounded-3xl border border-border-dim overflow-hidden shadow-sm">
           {loading ? (
-            <div className="py-20 flex flex-col items-center justify-center gap-4">
-              <Loader2 className="w-10 h-10 text-brand animate-spin" />
-              <p className="text-text-muted font-bold">Loading your catalog...</p>
-            </div>
+            <Loading text="Synchronizing your catalog..." />
           ) : courses.length > 0 ? (
             <table className="w-full text-left">
               <thead className="bg-bg-main border-b border-border-dim">

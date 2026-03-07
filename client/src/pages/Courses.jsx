@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import CourseCard from "../components/courses/CourseCard";
 import SyllabusModal from "../components/SyllabusModal";
 import { getExploreCourses } from "../service/student";
+import Loading from "../components/ui/Loading";
 
-const Courses = () => { 
+const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -29,11 +30,7 @@ const Courses = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-100]">
-        <div className="w-10 h-10 border-4 border-brand/20 border-t-brand rounded-full animate-spin" />
-      </div>
-    );
+    return <Loading text="Fetching Premium Courses..." />;
   }
 
   return (

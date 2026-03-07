@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Sidebar from "../SideBar";
 import { UserX, Search, Filter, Loader2 } from "lucide-react";
 import api from "../../../service/api";
+import Loading from "../../../components/ui/Loading";
+import Avatar from "../../../components/ui/Avatar";
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -69,10 +71,7 @@ const UserManagement = () => {
 
                 <div className="bg-bg-card rounded-3xl border border-border-dim overflow-hidden shadow-sm">
                     {loading ? (
-                        <div className="py-20 flex flex-col items-center justify-center gap-4">
-                            <Loader2 className="w-10 h-10 text-brand animate-spin" />
-                            <p className="text-text-muted font-bold">Synchronizing user data...</p>
-                        </div>
+                        <Loading text="Fetching user accounts..." />
                     ) : filteredUsers.length > 0 ? (
                         <table className="w-full text-left">
                             <thead className="bg-bg-main border-b border-border-dim">
@@ -88,9 +87,7 @@ const UserManagement = () => {
                                     <tr key={user.id} className="border-b border-border-dim hover:bg-bg-main/30 transition text-sm">
                                         <td className="p-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center font-bold text-brand text-xs">
-                                                    {user.firstName ? user.firstName[0] : user.email[0].toUpperCase()}
-                                                </div>
+                                                <Avatar user={user} size="sm" />
                                                 <div>
                                                     <p className="font-bold text-text-base">{user.firstName} {user.lastName}</p>
                                                     <p className="text-xs text-text-muted">{user.email}</p>
