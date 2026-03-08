@@ -6,6 +6,7 @@ const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const { user, login } = useAuth()
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    setError("")
 
     try {
       const { data } = await api.post("/auth/login", {
@@ -33,10 +35,10 @@ const Login = () => {
       navigate(target)
     } catch (error) {
       if (error.response?.status === 401) {
-        alert("Invalid credentials")
+        setError("Invalid email or password. Please try again.")
       } else {
         console.error("Login error:", error)
-        alert("Something went wrong. Please try again.")
+        setError("Something went wrong. Please try again later.")
       }
     } finally {
       setLoading(false)
@@ -49,6 +51,12 @@ const Login = () => {
         <h2 className="text-3xl font-bold mb-6 text-center">
           Welcome Back
         </h2>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm font-bold animate-in fade-in slide-in-from-top-2 duration-300">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col gap-2">

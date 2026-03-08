@@ -6,7 +6,8 @@ import { sendEmail } from '../lib/email.js';
 import { hashPassword } from '../lib/auth.js';
 
 export const registerUser = async (userData) => {
-    const { email, password, firstName, lastName, role } = userData;
+    let { email, password, firstName, lastName, role } = userData;
+    email = email.toLowerCase().trim();
 
     const existingUser = await prisma.user.findUnique({
         where: { email },
@@ -38,7 +39,8 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (email, password) => {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (!user) {
         throw new Error('Invalid email or password');
@@ -77,8 +79,9 @@ export const refreshSession = async (refreshToken) => {
 };
 
 export const forgotPassword = async (email) => {
+    const normalizedEmail = email.toLowerCase().trim();
     // 1. Check if user exists
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (!user) throw new Error('If a user with that email exists, a reset link has been sent.');
 
     // 2. Create a random reset token (to send in email)

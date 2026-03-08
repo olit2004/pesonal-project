@@ -74,7 +74,7 @@ export const refresh = async (req, res) => {
         // 2. Validate and get user info
         const user = await AuthService.refreshSession(refreshToken);
 
-        
+
         setToken(res, { id: user.id, role: user.role });
 
         res.status(200).json({
@@ -82,7 +82,7 @@ export const refresh = async (req, res) => {
             user,
         });
     } catch (error) {
-      
+
         removeToken(res);
         res.status(401).json({ success: false, error: error.message });
     }

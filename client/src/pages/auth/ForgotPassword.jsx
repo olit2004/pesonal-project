@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Mail, ChevronRight } from "lucide-react";
+import { ArrowLeft, Mail, ChevronRight, AlertCircle } from "lucide-react";
 
 import { forgotPassword } from "../../service/auth";
 

@@ -39,6 +39,11 @@ model User {
   // Stripe Integration
   stripeCustomerId String? @unique
 
+  // Email Verification
+  isVerified               Boolean   @default(false)
+  verificationToken        String?   @unique
+  verificationTokenExpires DateTime?
+
   // Security
   resetPasswordToken   String?
   passwordResetExpires DateTime?
