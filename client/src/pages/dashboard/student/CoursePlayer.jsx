@@ -53,7 +53,7 @@ const CoursePlayer = () => {
       }
     };
 
-    loadCourse();
+    initPlayer();
   }, [courseId, isSuccessRedirect, fetchCourse, invalidateCache, currentLesson]);
 
   const handleToggleProgress = async (lessonId, currentStatus) => {

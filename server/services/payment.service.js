@@ -25,30 +25,45 @@ export const createCheckoutSession = async (courseId, userId) => {
     }
 
     // 3. Generate Session
-    return await stripe.checkout.sessions.create({
+    console.log(`[Stripe] Creating session for Course: ${course.title} ($${course.price})`);
+
+    const session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['card'],
         line_items: [
             {
                 price_data: {
                     currency: 'usd',
-                    product_data: { name: course.title, images: [course.thumbnailUrl] },
+                    product_data: {
+                        name: course.title,
+                        images: course.thumbnailUrl ? [course.thumbnailUrl] : [],
+                        metadata: { courseId: course.id }
+                    },
                     unit_amount: Math.round(course.price * 100),
                 },
                 quantity: 1,
             },
         ],
         mode: 'payment',
-        success_url: `${process.env.CLIENT_URL}/dashboard/learn/${courseId}?success=true`,
+        success_url: `${process.env.CLIENT_URL}/dashboard/course/${courseId}?success=true`,
         cancel_url: `${process.env.CLIENT_URL}/dashboard/course/${courseId}`,
-        metadata: { userId, courseId },
+        metadata: {
+            userId: String(userId),
+            courseId: String(courseId)
+        },
     });
-    console.log(`[Stripe] Created session. Success URL: ${process.env.CLIENT_URL}/dashboard/learn/${courseId}?success=true`);
+
+    console.log(`[Stripe] Created session: ${session.id}. Success URL: ${process.env.CLIENT_URL}/dashboard/course/${courseId}?success=true`);
+    return session;
 };
 
 export const fulfillEnrollment = async (session) => {
     const { userId, courseId } = session.metadata;
     console.log(`[Fulfillment] Attempting to enroll User: ${userId} in Course: ${courseId}`);
+
+    if (!userId || !courseId) {
+        throw new Error('Missing metadata in successful session');
+    }
 
     return await prisma.enrollment.create({
         data: {
@@ -76,9 +91,13 @@ export const verifyAndFulfill = async (userId, courseId) => {
 
     // 2. Fetch user to get Customer ID
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user?.stripeCustomerId) throw new Error('No checkout session found for this user.');
+    if (!user?.stripeCustomerId) {
+        console.error('[Verification] User has no Stripe Customer ID.');
+        throw new Error('No checkout session found for this user.');
+    }
 
     // 3. List recent sessions for this customer
+    console.log(`[Verification] Listing sessions for Customer: ${user.stripeCustomerId}`);
     const sessions = await stripe.checkout.sessions.list({
         customer: user.stripeCustomerId,
         limit: 15,
@@ -89,21 +108,26 @@ export const verifyAndFulfill = async (userId, courseId) => {
     // 4. Find a paid session for this specific course
     const successfulSession = sessions.data.find(
         (s) => {
-            const match = s.metadata.courseId === courseId && s.payment_status === 'paid';
+            // Ensure we are comparing strings and handling potential undefineds
+            const sessionCourseId = String(s.metadata?.courseId || '');
+            const targetCourseId = String(courseId || '');
+
+            const isMatch = sessionCourseId === targetCourseId && s.payment_status === 'paid';
+
             if (s.payment_status === 'paid') {
-                console.log(`[Verification] Comparing Stripe metadata CourseID(${s.metadata.courseId}) vs Requested(${courseId})`);
+                console.log(`[Verification] Checked paid session ${s.id}: Metadata CourseID(${sessionCourseId}) vs Requested(${targetCourseId}) -> Match: ${isMatch}`);
             }
-            return match;
+            return isMatch;
         }
     );
 
     if (!successfulSession) {
-        console.error('[Verification] No successful session matched for this course.');
-        throw new Error('Payment not verified. Please contact support if you were charged.');
+        console.error(`[Verification] No successful session matched for Course: ${courseId}`);
+        throw new Error('Payment not yet verified by Stripe. If you were charged, please wait a moment and refresh.');
     }
 
     // 5. Success! Manually trigger fulfillment
-    console.log('[Verification] Successful session found! Triggering fulfillment...');
+    console.log(`[Verification] Successful session found: ${successfulSession.id}! Triggering fulfillment...`);
     return await fulfillEnrollment(successfulSession);
 };
 

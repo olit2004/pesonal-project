@@ -15,14 +15,14 @@ import {
 } from "lucide-react";
 
 import api from "../../../service/api";
-import { createCheckoutSession, updateLessonProgress } from "../../../service/student";
+import { createCheckoutSession, updateLessonProgress, verifyPaymentSession } from "../../../service/student";
 import Loading from "../../../components/ui/Loading";
 import { useData } from "../../../service/DataContext";
 
 const CourseDetail = () => {
     const { courseId } = useParams();
     const navigate = useNavigate();
-    const { enrollCourse, user } = useAuth();
+    const { enrollCourse, user, refreshUser } = useAuth();
     const { courseDetails, fetchCourse, invalidateCache, setCourseDetails } = useData();
 
     const [loading, setLoading] = useState(!courseDetails[courseId]);
@@ -50,6 +50,34 @@ const CourseDetail = () => {
         };
         loadCourse();
     }, [courseId, fetchCourse, activeLesson]);
+
+    // Handle Stripe Success Redirect
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.get("success") === "true") {
+            const handleVerification = async () => {
+                setIsProcessing(true);
+                try {
+                    console.log("[CourseDetail] Triggering payment verification...");
+                    await verifyPaymentSession(courseId);
+                    setIsSuccess(true);
+                    invalidateCache('stats');
+                    invalidateCache('catalog');
+                    await refreshUser();
+
+                    setTimeout(() => {
+                        navigate(window.location.pathname, { replace: true });
+                    }, 3000);
+                } catch (error) {
+                    console.error("Verification error:", error);
+                    // alert("Payment verification failed. Please refresh or contact support.");
+                } finally {
+                    setIsProcessing(false);
+                }
+            };
+            handleVerification();
+        }
+    }, [courseId, invalidateCache, refreshUser, navigate]);
 
     const isAlreadyEnrolled = user?.enrollments?.some(e => e.courseId === course?.id);
     const isAdmin = user?.role === "ADMIN";

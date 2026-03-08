@@ -28,11 +28,13 @@ import CourseBuilder from "./pages/dashboard/Admin/CourseBuilder"
 import UserManagement from "./pages/dashboard/Admin/UserManagement"
 import Sales from "./pages/dashboard/Admin/Sales"
 
+import ErrorPage from "./components/ui/ErrorPage"
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       // Public routes
       { index: true, element: <Home /> },
@@ -83,9 +85,9 @@ export const router = createBrowserRouter([
         ],
       },
 
-   
+
       // ADMIN DASHBOARD
-      
+
       {
         path: "admin",
         element: (

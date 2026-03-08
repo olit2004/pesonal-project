@@ -78,9 +78,21 @@ export const AuthProvider = ({ children }) => {
     }))
   }
 
+  const refreshUser = async () => {
+    try {
+      const response = await api.get("/users/me")
+      const loadedUser = response.data.user || response.data.data || response.data;
+      if (loadedUser && (loadedUser.id || loadedUser.email)) {
+        setUser(loadedUser)
+      }
+    } catch (err) {
+      console.error("[AuthContext] Refresh user error:", err);
+    }
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, logout, enrollCourse }}
+      value={{ user, loading, login, logout, enrollCourse, refreshUser }}
     >
       {children}
     </AuthContext.Provider>
